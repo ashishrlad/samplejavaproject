@@ -1,0 +1,61 @@
+name: Java CI Pipeline (Containerized)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  checkout-code:
+    runs-on: ubuntu-latest
+    container: alpine/git
+    steps:
+      - name: Clone source code
+        run: git clone https://github.com/${{ github.repository }} .
+
+  scan:
+    runs-on: ubuntu-latest
+    container: sonarsource/sonar-scanner-cli
+    needs: checkout-code
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Scan code
+        run: sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
+
+  build:
+    runs-on: ubuntu-latest
+    container: maven:3.9.4-eclipse-temurin-17
+    needs: scan
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build Java App
+        run: mvn clean package
+
+  docker-build:
+    runs-on: ubuntu-latest
+    container: docker:24.0.5-cli
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build Docker Image
+        run: |
+          echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
+          docker build -t ${{ github.repository }}:latest .
+
+  docker-push:
+    runs-on: ubuntu-latest
+    container: docker:24.0.5-cli
+    needs: docker-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Push Docker Image
+        run: |
+          docker tag ${{ github.repository }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
