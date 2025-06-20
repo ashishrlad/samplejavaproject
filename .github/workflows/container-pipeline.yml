@@ -49,6 +49,5 @@ jobs:
       # Stage 5: Push Docker Image to DockerHub
       - name: Push Docker Image
         run: |
-          apt-get update & apt-get install sudo -y
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           sudo docker push $IMAGE_NAME:latest
