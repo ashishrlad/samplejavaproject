@@ -24,14 +24,16 @@ jobs:
           SONAR_ORG: ${{ github.event.repository.name }}
         run: |
             docker run --rm \
-            -e SONAR_TOKEN \
-            -v ${{ github.workspace }}:/usr/src \
+             -v ${{ github.workspace }}:/usr/src \
+             -w /usr/src \
              sonarsource/sonar-scanner-cli \
              sonar-scanner \
             -Dsonar.projectKey=${{ github.repository }} \
             -Dsonar.sources=. \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=$SONAR_ORG
+            -Dsonar.organization=$SONAR_ORG \
+            -Dsonar.token=$SONAR_TOKEN
+
 
 
       # Stage 3: Build Java App with Maven
