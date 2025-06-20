@@ -10,7 +10,7 @@ jobs:
   java-ci:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/samplejavaapplication    #${{ github.repository }}
 
     steps:
       # Stage 1: Checkout code (required for later volumes)
