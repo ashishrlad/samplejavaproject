@@ -22,15 +22,10 @@ jobs:
         run: |
          docker run --rm \
           -v "$PWD":/usr/src \
+          -v "$PWD/sonar-scanner.properties":/opt/sonar-scanner/conf/sonar-scanner.properties \
           -w /usr/src \
-          -e SONAR_TOKEN=$SONAR_TOKEN \
-          sonarsource/sonar-scanner-cli \
-          sonar-scanner \
-            -Dsonar.projectKey=${{ github.repository }} \
-            -Dsonar.organization=${{ github.repository }} \
-            -Dsonar.sources=src \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN
+          -e SONAR_TOKEN=${{ secrets.SONAR_TOKEN }} \
+          sonarsource/sonar-scanner-cli
 
 
 
