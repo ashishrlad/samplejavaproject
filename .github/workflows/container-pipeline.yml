@@ -18,15 +18,19 @@ jobs:
         uses: actions/checkout@v3
 
       # Stage 2: Scan (inside Sonar Scanner container)
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-            args: >
-             -Dsonar.projectKey=${{ github.repository }}
-             -Dsonar.organization=${{ github.repository }}
-             -Dsonar.sources=.
+      - name: SonarQube Scan using Docker
+        run: |
+         docker run --rm \
+          -v "$PWD":/usr/src \
+          -w /usr/src \
+          -e SONAR_TOKEN=$SONAR_TOKEN \
+          sonarsource/sonar-scanner-cli \
+          sonar-scanner \
+            -Dsonar.projectKey=${{ github.repository }} \
+            -Dsonar.organization=${{ github.repository }} \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
 
 
 
