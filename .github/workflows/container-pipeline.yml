@@ -7,68 +7,46 @@ on:
     branches: [ main ]
 
 jobs:
-  checkout-code:
+  java-ci:
     runs-on: ubuntu-latest
-   # container: alpine/git
     steps:
+      # Stage 1: Checkout Code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run scan in alpine
-        uses: docker://alpine/git
+      # Stage 2: Scan Source (inside sonar-scanner container)
+      - name: Code Scan
+        uses: docker://sonarsource/sonar-scanner-cli
         with:
-          entrypoint: sh
-        run: git --version
-      #- name: Clone source code
-       # run: sudo git clone https://github.com/${{ github.repository }} .
-
-  scan:
-    runs-on: ubuntu-latest
-    #container: sonarsource/sonar-scanner-cli
-    needs: checkout-code
-    steps:
-      - name: Install required packages
+          entrypoint: ""
         run: |
-          sudo apt update
-          sudo apt install -y git docker.io
-      - name: Checkout
-        uses: actions/checkout@v3
-        container: sonarsource/sonar-scanner-cli
-      - name: Scan code
-        run: sudo sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
+          sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
 
-  build:
-    runs-on: ubuntu-latest
-    container: maven:3.9.4-eclipse-temurin-17
-    needs: scan
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Build Java App
-        run: sudo mvn clean package
+      # Stage 3: Build Java App (inside Maven container)
+      - name: Build with Maven
+        uses: docker://maven:3.9.4-eclipse-temurin-17
+        with:
+          entrypoint: ""
+        run: mvn clean package
 
-  docker-build:
-    runs-on: ubuntu-latest
-    container: docker:24.0.5-cli
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      # Stage 4: Build Docker Image (inside Docker CLI container)
       - name: Build Docker Image
+        uses: docker://docker:24.0.5-cli
+        with:
+          entrypoint: ""
         run: |
-          sudo echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
+          echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
           docker build -t ${{ github.repository }}:latest .
 
-  docker-push:
-    runs-on: ubuntu-latest
-    container: docker:24.0.5-cli
-    needs: docker-build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Login to DockerHub
-        run: sudo echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      # Stage 5: Push Docker Image (inside Docker CLI container)
       - name: Push Docker Image
+        uses: docker://docker:24.0.5-cli
+        with:
+          entrypoint: ""
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          sudo docker tag ${{ github.repository }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
-          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker tag ${{ github.repository }} $DOCKERHUB_USERNAME/${{ github.repository }}
+          docker push $DOCKERHUB_USERNAME/${{ github.repository }}
