@@ -9,18 +9,31 @@ on:
 jobs:
   checkout-code:
     runs-on: ubuntu-latest
-    container: alpine/git
+   # container: alpine/git
     steps:
-      - name: Clone source code
-        run: sudo git clone https://github.com/${{ github.repository }} .
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run scan in alpine
+        uses: docker://alpine/git
+        with:
+          entrypoint: sh
+        run: git --version
+      #- name: Clone source code
+       # run: sudo git clone https://github.com/${{ github.repository }} .
 
   scan:
     runs-on: ubuntu-latest
-    container: sonarsource/sonar-scanner-cli
+    #container: sonarsource/sonar-scanner-cli
     needs: checkout-code
     steps:
+      - name: Install required packages
+        run: |
+          sudo apt update
+          sudo apt install -y git docker.io
       - name: Checkout
         uses: actions/checkout@v3
+        container: sonarsource/sonar-scanner-cli
       - name: Scan code
         run: sudo sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
 
