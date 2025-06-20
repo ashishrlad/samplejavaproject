@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/samplejavaapplication    #${{ github.repository }}
-
+      SONAR_TOKEN: ${{ secrets.PROJECT_KEY.SONAR_TOKEN }}
     steps:
       # Stage 1: Checkout code (required for later volumes)
       - name: Checkout code
