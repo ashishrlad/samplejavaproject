@@ -9,44 +9,39 @@ on:
 jobs:
   java-ci:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+
     steps:
-      # Stage 1: Checkout Code
+      # Stage 1: Checkout code (required for later volumes)
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Stage 2: Scan Source (inside sonar-scanner container)
-      - name: Code Scan
-        uses: docker://sonarsource/sonar-scanner-cli
-        with:
-          entrypoint: ""
+      # Stage 2: Scan (inside Sonar Scanner container)
+      - name: Scan code with Sonar
         run: |
-          sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
+          docker run --rm \
+            -v ${{ github.workspace }}:/usr/src \
+            sonarsource/sonar-scanner-cli \
+            sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
 
-      # Stage 3: Build Java App (inside Maven container)
+      # Stage 3: Build Java App with Maven
       - name: Build with Maven
-        uses: docker://maven:3.9.4-eclipse-temurin-17
-        with:
-          entrypoint: ""
-        run: mvn clean package
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/app \
+            -w /app \
+            maven:3.9.4-eclipse-temurin-17 \
+            mvn clean package
 
-      # Stage 4: Build Docker Image (inside Docker CLI container)
+      # Stage 4: Build Docker Image
       - name: Build Docker Image
-        uses: docker://docker:24.0.5-cli
-        with:
-          entrypoint: ""
         run: |
           echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
-          docker build -t ${{ github.repository }}:latest .
+          docker build -t $IMAGE_NAME:latest .
 
-      # Stage 5: Push Docker Image (inside Docker CLI container)
+      # Stage 5: Push Docker Image to DockerHub
       - name: Push Docker Image
-        uses: docker://docker:24.0.5-cli
-        with:
-          entrypoint: ""
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-          docker tag ${{ github.repository }} $DOCKERHUB_USERNAME/${{ github.repository }}
-          docker push $DOCKERHUB_USERNAME/${{ github.repository }}
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push $IMAGE_NAME:latest
