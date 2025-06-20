@@ -12,7 +12,7 @@ jobs:
     container: alpine/git
     steps:
       - name: Clone source code
-        run: git clone https://github.com/${{ github.repository }} .
+        run: sudo git clone https://github.com/${{ github.repository }} .
 
   scan:
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Scan code
-        run: sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
+        run: sudo sonar-scanner -Dsonar.projectKey=java-app -Dsonar.sources=.
 
   build:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build Java App
-        run: mvn clean package
+        run: sudo mvn clean package
 
   docker-build:
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Build Docker Image
         run: |
-          echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
+          sudo echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
           docker build -t ${{ github.repository }}:latest .
 
   docker-push:
@@ -54,8 +54,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        run: sudo echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - name: Push Docker Image
         run: |
-          docker tag ${{ github.repository }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+          sudo docker tag ${{ github.repository }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
