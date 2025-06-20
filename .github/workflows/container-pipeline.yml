@@ -47,7 +47,10 @@ jobs:
           docker build -t $IMAGE_NAME:latest .
 
       # Stage 5: Push Docker Image to DockerHub
-      - name: Push Docker Image
+      - name: Tag and Push Docker Image
+        env:
+         IMAGE_NAME: samplejavaproject
         run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          sudo docker push $IMAGE_NAME:latest
+             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+             docker tag $IMAGE_NAME:latest ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:latest
+             docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:latest
