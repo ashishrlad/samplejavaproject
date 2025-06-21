@@ -40,8 +40,12 @@ jobs:
      # Stage 4.5: Scan Docker Image with Trivy and Save Report
       - name: Security Scan with Trivy (Save to file)
         run: |
-          trivy image --format table --output trivy-report.txt --severity CRITICAL,HIGH --ignore-unfixed $IMAGE_NAME:latest
-
+          docker run --rm \
+            -v ${{ github.workspace }}:/root/repo \
+            aquasec/trivy:latest \
+            image --format table --output /root/repo/trivy-report.txt \
+            --severity CRITICAL,HIGH --ignore-unfixed $IMAGE_NAME:latest
+            
       # Stage 4.6: Email Trivy Report
       - name: Send Trivy Report via Email
         uses: dawidd6/action-send-mail@v3
