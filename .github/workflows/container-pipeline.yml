@@ -8,6 +8,7 @@ on:
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  GH_PAT: ${{ secrets.GH_PAT }}
 
 jobs:
   java-ci:
