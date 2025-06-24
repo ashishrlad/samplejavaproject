@@ -97,9 +97,9 @@ jobs:
         run: |
           git config --global user.name "Ashish"
           git config --global user.email "ashishrlad@gmail.com"
+          git remote remove origin || true
           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           cd config_repo_samplejava
-          git remote remove origin || true
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ashishrlad/config_repo_samplejava.git
           echo "# change" >> README.md
           #git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ashishrlad/config_repo_samplejava.git
