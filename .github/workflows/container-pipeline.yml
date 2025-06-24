@@ -115,7 +115,7 @@ jobs:
           pwd
           cd config_repo_samplejava
           ls -lah
-          git remote origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+          git remote add main -f https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
  
       # Update Manifest Repo
