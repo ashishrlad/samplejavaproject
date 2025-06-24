@@ -97,7 +97,7 @@ jobs:
         with:
           repository: ashishrlad/config_repo_samplejava
           token: ${{ secrets.GH_PAT }}
-          path: /manifest-repo/main
+          path: /config_repo_samplejava/manifest-repo/main
 
       - name: Modify deployment.yml
         run: |
