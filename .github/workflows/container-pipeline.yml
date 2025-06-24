@@ -118,7 +118,7 @@ jobs:
             pwd
             ls -lah
             cd config_repo_samplejava
-            git push remote https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git main
+            git push main https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
       
       # Update Manifest Repo
       #- name: Update Manifest Repo
