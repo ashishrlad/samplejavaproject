@@ -79,10 +79,10 @@ jobs:
         if: (github.ref_name != 'prod') || (github.event_name == 'workflow_dispatch')
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/samplejavaapplication-${{ github.ref_name }}-java-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
     
-      - name: Push Docker Image to DockerHub
-        if: (github.ref == 'refs/heads/prod')
-        run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/samplejavaapplication-prod-java-app:latest
+      #- name: Push Docker Image to DockerHub
+        #if: (github.ref == 'refs/heads/prod')
+        #run: |
+          #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          #docker push ${{ secrets.DOCKERHUB_USERNAME }}/samplejavaapplication-prod-java-app:latest
