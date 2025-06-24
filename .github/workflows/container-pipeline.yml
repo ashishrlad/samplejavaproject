@@ -102,13 +102,13 @@ jobs:
            git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
       - name: Update deployment.yml and Push
         run: |
-           git pull
+           git pull origin main
            pwd
            cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
            sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
            git add guestbookdeployment.yml
            git commit -m "Update prod image to ${{ github.ref_name }}"
-           git push
+           git push origin main
 
 
 
