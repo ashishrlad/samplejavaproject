@@ -96,7 +96,7 @@ jobs:
       - name: "Push Updated Image Tag" 
         run: |
           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-          git init
+          #git init
           git config --global user.name "ashishrlad"
           git config --global user.email "ashishrlad@gmail.com"
           pwd
@@ -104,6 +104,7 @@ jobs:
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
           cat guestbookdeployment.yml
           git add guestbookdeployment.yml
+          git config --global init.defaultBranch ${{ github.ref_name }}
           git commit -m "push origin HEAD:${{ github.ref_name }}"
           git remote add origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
