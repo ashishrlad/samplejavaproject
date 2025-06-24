@@ -113,6 +113,7 @@ jobs:
         run: |
           ls -lah
           pwd
+          cd config_repo_samplejava
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
  
