@@ -95,14 +95,14 @@ jobs:
       - name: Update manifest for prod
         uses: actions/checkout@v4
         with:
-          repository: ashishrlad/config_repo_samplejava/manifest-repo
+          repository: ashishrlad/config_repo_samplejava/
           token: ${{ secrets.GH_PAT }}
-          path: main
+          path: manifest-repo
 
       - name: Modify deployment.yml
         run: |
           pwd
-          cd manifest-repo/manifest-repo/main
+          cd /manifest-repo/main
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml 
           git config user.name "Ashish"
           git config user.email "ashishrlad@gmail.com"
