@@ -93,22 +93,17 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
    
-      - name: Clone and Set Authenticated Remote
+      - name: Push to manifest repo
         run: |
-           git config --global user.name "Ashish"
-           git config --global user.email "ashishrlad@gmail.com"
-           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-           cd config_repo_samplejava
-           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-      - name: Update deployment.yml and Push
-        run: |
-           git pull origin main
-           pwd
-           cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
-           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
-           git add guestbookdeployment.yml
-           git commit -m "Update prod image to ${{ github.ref_name }}"
-           git push origin main
+          git config --global user.name "Ashish"
+          git config --global user.email "ashishrlad@gmail.com"
+          git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+          cd config_repo_samplejava
+          echo "# change" >> README.md
+          git add .
+          git commit -m "Automated update"
+          git push origin main
+
 
 
 
