@@ -116,11 +116,11 @@ jobs:
       - name: Update Image Version 
         uses: OpsVerseIO/image-updater-action@0.1.0
         with:
-          valueFile: /samplejavaproject/config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
+          valueFile: '/home/runner/work/samplejavaproject/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
           propertyPath: 'image:'
           value: 'image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}'
-          branch: main
-          targetBranch: main
+          branch: 'main'
+          targetBranch: 'main'
           createPR: true
           message: 'Update Image Version to ${{ steps.image.outputs.version }}' 
       
