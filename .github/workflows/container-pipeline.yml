@@ -54,8 +54,6 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
           output: 'trivy-report.txt'
-
-
       # Send Email Report
       #- name: Email Trivy Report
         #uses: dawidd6/action-send-mail@v3
@@ -117,7 +115,15 @@ jobs:
           ls -lah
           git remote add main -f https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
- 
+      - name: Set authenticated remote URL
+        run: |
+            cd config_repo_samplejava
+            git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+      - name: Push changes to main
+        run: |
+            cd config_repo_samplejava
+            git push origin main
+      
       # Update Manifest Repo
       #- name: Update Manifest Repo
         #run: |
