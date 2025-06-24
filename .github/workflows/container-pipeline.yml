@@ -93,23 +93,17 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
    
-      - name: Git checkout
-        uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GH_PAT1 }} 
-
-      - name: "Update Deployment Image Tag" 
-        working-directory: "config_repo_samplejava"
+      - name: "Push Updated Image Tag" 
         run: |
+          git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+          git init
+          git config --global user.name "ashishrlad"
+          git config --global user.email "ashishrlad@gmail.com"
           pwd
           cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
           cat guestbookdeployment.yml
-
-      - name: "Push Updated Image Tag" 
-        run: |
-          git config --global user.name "@ashishrlad-bot"
-          git config --global user.email "ashishrlad-bot@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git add guestbookdeployment.yml
           git commit -m "push origin HEAD:${{ github.ref_name }}"
           git push origin main
