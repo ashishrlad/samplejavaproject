@@ -92,13 +92,18 @@ jobs:
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
+      - name: Debug secrets
+        run: echo "GH_PAT is ${GH_PAT}"
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
       
       - name: Checkout manifest repo
         uses: actions/checkout@v4
         with:
-          repository: ashishrlad/config_repo_samplejava
-          token: ${{ secrets.GH_PAT }}   # Ensure this is defined in your workflow secrets
-          path: manifest-repo
+         repository: ashishrlad/config_repo_samplejava
+         token: ${{ secrets.GH_PAT }}
+         path: manifest-repo
+
 
       - name: Modify deployment.yml
         run: |
