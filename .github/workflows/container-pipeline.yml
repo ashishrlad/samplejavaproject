@@ -56,18 +56,19 @@ jobs:
 
 
       # Send Email Report
-      - name: Email Trivy Report
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "Trivy Report - ${{ github.repository }} (${{ github.ref_name }})"
-          body: "Attached Trivy scan report for image built from ${{ github.ref_name }}."
-          to: ashishrlad@gmail.com
-          from: ${{ secrets.MAIL_USERNAME }}
-          attachments: trivy-report.txt
+      #- name: Email Trivy Report
+        #uses: dawidd6/action-send-mail@v3
+        #with:
+          #server_address: smtp.gmail.com
+          #server_port: 587
+          #username: ${{ secrets.MAIL_USERNAME }}
+          #password: ${{ secrets.MAIL_PASSWORD }}
+          #subject: "Trivy Report - ${{ github.repository }} (${{ github.ref_name }})"
+          #body: "Attached Trivy scan report for image built from ${{ github.ref_name }}."
+          #to: ashishrlad@gmail.com
+          #from: ${{ secrets.MAIL_USERNAME }}
+          #attachments: trivy-report.txt
+      
        # docker push image to dockerhub
       - name: Docker Push
         run: |
@@ -99,7 +100,8 @@ jobs:
           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           cd config_repo_samplejava/manifest-repo/${{ github.ref_name }}
           ls -lah
-          sed -i 's|^\(.*image:\).*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest|' config_repo_samplejava/manifest-repo/${{ github.ref_name }}/guestbookdeployment.yml
+          pwd
+          sed -i 's|^\(.*image:\).*| image:* ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest|' config_repo_samplejava/manifest-repo/${{ github.ref_name }}/guestbookdeployment.yml
           git add guestbookdeployment.yml
           git commit -m "Update image for ${{ github.ref_name }}"
           git push          
