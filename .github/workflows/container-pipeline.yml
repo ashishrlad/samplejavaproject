@@ -71,7 +71,7 @@ jobs:
 
   deploy-prod:
     needs: java-ci    
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
     #environment: production   # This enforces manual approval
     steps:
       # Push Image
