@@ -113,12 +113,16 @@ jobs:
             ls -lah
             cd config_repo_samplejava
             git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-      - name: Push changes to main
-        run: |
-            pwd
-            ls -lah
-            cd config_repo_samplejava
-            git push main https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+      - name: Update Image Version 
+        uses: OpsVerseIO/image-updater-action@0.1.0
+        with:
+          valueFile: /samplejavaproject/config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
+          propertyPath: 'image:'
+          value: 'image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}'
+          branch: main
+          targetBranch: main
+          createPR: true
+          message: 'Update Image Version to ${{ steps.image.outputs.version }}' 
       
       # Update Manifest Repo
       #- name: Update Manifest Repo
