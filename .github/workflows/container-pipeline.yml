@@ -68,8 +68,9 @@ jobs:
           to: ashishrlad@gmail.com
           from: ${{ secrets.MAIL_USERNAME }}
           attachments: trivy-report.txt
+
   deploy-prod:
-    #needs: java-ci
+    needs: java-ci
     if: github.ref_name == 'prod'
     runs-on: ubuntu-latest
     environment: production   # This enforces manual approval
