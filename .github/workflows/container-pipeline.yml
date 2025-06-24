@@ -96,7 +96,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }} 
+          token: ${{ secrets.GH_PAT1 }} 
 
       - name: "Update Deployment Image Tag" 
         working-directory: "config_repo_samplejava"
