@@ -96,7 +96,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-           repository: https://github.com/ashishrlad/config_repo_samplejava
+           repository: ashishrlad/config_repo_samplejava
            token:  ${{ secrets.GH_PAT }} # default repo token
            path: manifest-repo/main
 
