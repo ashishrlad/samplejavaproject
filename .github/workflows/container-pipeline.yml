@@ -104,13 +104,11 @@ jobs:
           cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
           cat guestbookdeployment.yml
-		 
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@ashishrlad@gmail"
-
           git add guestbookdeployment.yml
           git commit -m "CI: Update image name in igit add guestbookdeployment.yml" || echo "No changes to commit"
           git push
