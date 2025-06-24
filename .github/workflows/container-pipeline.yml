@@ -103,9 +103,9 @@ jobs:
           cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
           cat guestbookdeployment.yml
-          git remote add set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git add guestbookdeployment.yml
           git commit -m "push origin HEAD:${{ github.ref_name }}"
+          git remote add set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
  
       # Update Manifest Repo
