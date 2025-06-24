@@ -101,7 +101,7 @@ jobs:
           cd config_repo_samplejava/manifest-repo/${{ github.ref_name }}
           ls -lah
           pwd
-          sed 's/^\([[:blank:]]*\)- image: .*/\image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}/' guestbookdeployment.yml        
+          sed '/^\([[:blank:]]*\)- image: .*/\image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}/' guestbookdeployment.yml        
           cat guestbookdeployment.yml
           git add .
           git commit -m "Update image for ${{ github.ref_name }}"
