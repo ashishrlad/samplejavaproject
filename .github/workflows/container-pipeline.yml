@@ -113,7 +113,7 @@ jobs:
             ls -lah
             cd config_repo_samplejava
             git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-            git push main :main
+            git push origin main
             
       # Update Manifest Repo
       #- name: Update Manifest Repo
