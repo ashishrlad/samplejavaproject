@@ -94,7 +94,7 @@ jobs:
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
    
       - name: "Git checkout"
-        uses: "actions/checkout@v2"
+        uses: actions/checkout@v2
         with:
           token: ${{ secrets.GH_PAT }} 
 
