@@ -69,11 +69,11 @@ jobs:
           from: ${{ secrets.MAIL_USERNAME }}
           attachments: trivy-report.txt
 
-  ##deploy-prod:
-    ##needs: java-ci    
-    ##runs-on: ubuntu-latest
-    #environment: production   # This enforces manual approval
-    ##steps:
+  deploy-prod:
+    needs: java-ci    
+    runs-on: ubuntu-latest
+    environment: production   # This enforces manual approval
+    steps:
       # Push Image
       - name: Docker Push
         if: github.ref_name != 'main' 
