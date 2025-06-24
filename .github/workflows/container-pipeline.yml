@@ -111,6 +111,8 @@ jobs:
           #git remote add origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git &&
       - name: Push Changes
         run: |
+          ls -lah
+          pwd
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
  
