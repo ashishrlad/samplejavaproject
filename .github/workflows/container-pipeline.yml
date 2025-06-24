@@ -98,10 +98,10 @@ jobs:
           git config --global user.name "Ashish"
           git config --global user.email "ashishrlad@gmail.com"
           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-          #cd config_repo_samplejava/manifest-repo/${{ github.ref_name }}
-          #ls -lah
-          #pwd
-          sed -i 's|^\(.*image:\).*| image:* ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest|' /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml
+          cd config_repo_samplejava/manifest-repo/${{ github.ref_name }}
+          ls -lah
+          pwd
+          sed -i 's|^\(.*image:\).*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest|' guestbookdeployment.yml
           git add guestbookdeployment.yml
           git commit -m "Update image for ${{ github.ref_name }}"
           git push          
