@@ -8,7 +8,7 @@ on:
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  GH_PAT: ${{ secrets.GH_PAT }}
+  #GH_PAT: ${{ secrets.GH_PAT }}
 
 jobs:
   java-ci:
@@ -114,8 +114,10 @@ jobs:
             cd config_repo_samplejava
             git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
       - name: Update Image Version 
-        uses: OpsVerseIO/image-updater-action@0.1.0
+        uses: actions/checkout@v3
         with:
+          repository: 'config_repo_samplejava/manifest-repo'
+          token: '${{ secrets.GH_PAT }}'
           valueFile: '/home/runner/work/samplejavaproject/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
           propertyPath: 'image:'
           value: 'image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}'
