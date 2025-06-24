@@ -101,10 +101,9 @@ jobs:
           cd config_repo_samplejava/manifest-repo/${{ github.ref_name }}
           ls -lah
           pwd
-          sed -i 's|^[[:space:]]*- image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|' guestbookdeployment.yml        
+          sed 's/^\([[:blank:]]*\)- image: .*/\image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}/' guestbookdeployment.yml        
           cat guestbookdeployment.yml
-          
-          git add guestbookdeployment.yml
+          git add .
           git commit -m "Update image for ${{ github.ref_name }}"
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
           git push origin main
