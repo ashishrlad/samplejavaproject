@@ -113,27 +113,7 @@ jobs:
             ls -lah
             cd config_repo_samplejava
             git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-        with:
-          repository: ashishrlad/config_repo_samplejava
-          token: ${{ secrets.GH_PAT1 }} 
-          path: manifest-repo
-      - name: Update Image Tag
-        run: |
-            sed -i 's|image: .*|image: ***/main-java-app:15860811864|' manifest-repo/main/guestbookdeployment.yml
-      - name: Commit and Push Changes
-        run: |
-            pwd
-            ls -lah 
-            cd config_repo_samplejava
-            git config user.name "ashish"
-            git config user.email "ashishrlad@gmail.com"
-            git add .
-            git commit -m "Update Image Version to main-java-app:15860811864"
-            git push origin main
-        env:
-            GITHUB_TOKEN: ${{ secrets.GH_PAT }} 
+            git push main :main
       
       # Update Manifest Repo
       #- name: Update Manifest Repo
