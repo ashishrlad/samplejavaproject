@@ -103,7 +103,7 @@ jobs:
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" manifest-repo/main/guestbookdeployment.yml
           cat manifest-repo/main/guestbookdeployment.yml
           git add manifest-repo/main/guestbookdeployment.yml
-          git config --global init.defaultBranch ${{ github.ref_name }}
+          #git config --global init.defaultBranch ${{ github.ref_name }}
           git commit -m "Update image tag ${{ github.ref_name }}"
           #git remote remove origin
           #git remote add origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git &&
@@ -112,8 +112,8 @@ jobs:
             pwd
             ls -lah
             cd config_repo_samplejava
-            git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-            git push main :main
+            #git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+            git push main :main https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
       
       # Update Manifest Repo
       #- name: Update Manifest Repo
