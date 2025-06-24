@@ -95,7 +95,7 @@ jobs:
    
       - name: "Push Updated Image Tag" 
         run: |
-          git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+          git clone https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
           #git init
           git config --global user.name "ashishrlad"
           git config --global user.email "ashishrlad@gmail.com"
