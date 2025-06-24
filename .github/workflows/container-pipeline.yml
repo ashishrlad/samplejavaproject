@@ -68,21 +68,37 @@ jobs:
           to: ashishrlad@gmail.com
           from: ${{ secrets.MAIL_USERNAME }}
           attachments: trivy-report.txt
+       # docker push image to dockerhub
+      - name: Docker Push
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
 
   deploy-prod:
     needs: java-ci    
     runs-on: ubuntu-latest
     environment: production   # This enforces manual approval
     steps:
-      # Push Image
+      # Pull Image
       - name: Docker Push
         if: github.ref_name != 'main' 
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
     
       - name: Push Docker Image to DockerHub
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
+      # Update Manifest Repo
+      - name: Update Manifest Repo
+        run: |
+          git config --global user.name "Ashish"
+          git config --global user.email "ashishrlad@gmail.com"
+          git clone https://x-access-token:${{ secrets.GH_PAT }}@https://github.com/ashishrlad/config_repo_samplejava.git
+          cd manifest-repo/${{ github.ref_name }}
+          sed -i 's|^\(.*image:\).*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest|' config_repo_samplejava/manifest-repo/${{ github.ref_name }}-/guestbookdeployment.yml
+          git add guestbookdeployment.yml
+          git commit -m "Update image for ${{ github.ref_name }}"
+          git push          
