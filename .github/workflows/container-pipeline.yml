@@ -95,7 +95,7 @@ jobs:
       - name: Update manifest for prod
         uses: actions/checkout@v4
         with:
-          repository: config_repo_samplejava/manifest-repo
+          repository: ashishrlad/config_repo_samplejava
           token: ${{ secrets.GH_PAT }}
           path: /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
 
