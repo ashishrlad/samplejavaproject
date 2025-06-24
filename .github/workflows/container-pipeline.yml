@@ -93,26 +93,27 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
    
-      - name: Push to manifest repo
+      - name: "Git checkout"
+        uses: "actions/checkout@v2"
+        with:
+          token: ${{ secrets.GH_PAT1 }} 
+
+      - name: "Update Deployment Image Tag" 
+        working-directory: "config_repo_samplejava"
         run: |
-          git config --global user.name "Ashish"
-          git config --global user.email "ashishrlad@gmail.com"
-          git remote remove origin || true  # remove if exists (optional, safe)
-          git remote add origin https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
-          git clone https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
-          cd config_repo_samplejava
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
-          echo "# change" >> README.md
-          #git remote set-url origin https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
-          git add .
-          git commit -m "Automated update"
-          #git remote set-url origin https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
+          pwd
+          cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
+          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
+          cat guestbookdeployment.yml
+
+      - name: "Push Updated Image Tag" 
+        run: |
+          git config --global user.name "@ashishrlad-bot"
+          git config --global user.email "ashishrlad-bot@users.noreply.github.com"
+          git add guestbookdeployment.yml
+          git commit -m "push origin HEAD:${{ github.ref_name }}"
           git push origin main
-
-
-
-
-
+ 
       # Update Manifest Repo
       #- name: Update Manifest Repo
         #run: |
