@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, dev, stage, prod]
   workflow_dispatch:
-    #environment: production
+    environment: production
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -71,9 +71,9 @@ jobs:
 
   deploy-prod:
     needs: java-ci
-    if: github.ref_name == 'prod'
+    if: (github.ref == 'refs/heads/prod') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    #environment: production   # This enforces manual approval
+    environment: production   # This enforces manual approval
     steps:
       - name: Push Docker Image to DockerHub
         run: |
