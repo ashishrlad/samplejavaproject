@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, dev, stage, prod]
   workflow_dispatch:
-    environment: production
+    #environment: production
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -70,12 +70,12 @@ jobs:
           attachments: trivy-report.txt
 
   deploy-prod:
-    needs: java-ci
-    if: (github.ref == 'refs/heads/prod') || (github.event_name == 'workflow_dispatch')
+    needs: java-ci    
     runs-on: ubuntu-latest
-    environment: production   # This enforces manual approval
+    #environment: production   # This enforces manual approval
     steps:
       - name: Push Docker Image to DockerHub
+        if: (github.ref == 'refs/heads/prod') || (github.event_name == 'workflow_dispatch')
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/prod-java-app:latest
