@@ -93,27 +93,22 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
    
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-           repository: ashishrlad/config_repo_samplejava
-           token:  ${{ secrets.GH_PAT }} # default repo token
-           path: manifest-repo/main
-
-      - name: Change image name in index.html
+      - name: Clone and Set Authenticated Remote
         run: |
-          pwd
-          cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
-          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
-          cat guestbookdeployment.yml
-
-      - name: Commit and push changes
+           git config --global user.name "Ashish"
+           git config --global user.email "ashishrlad@gmail.com"
+           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+           cd config_repo_samplejava
+           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+      - name: Update deployment.yml and Push
         run: |
-          git config user.name "ashish"
-          git config user.email "ashishrlad@gmail"
-          git add guestbookdeployment.yml
-          git commit -m "CI: Update image name in igit add guestbookdeployment.yml" || echo "No changes to commit"
-          git push
+           cd config_repo_samplejava/main
+           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
+           git add guestbookdeployment.yml
+           git commit -m "Update prod image to ${{ github.ref_name }}"
+           git push
+
+
 
 
       # Update Manifest Repo
