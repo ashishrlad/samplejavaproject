@@ -97,10 +97,11 @@ jobs:
         with:
           repository: ashishrlad/config_repo_samplejava
           token: ${{ secrets.GH_PAT }}
-          path: manifest-repo
+          path: manifest-repo/main/
 
       - name: Modify deployment.yml
         run: |
+          pwd
           cd manifest-repo/manifest-repo/main
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml 
           git config user.name "Ashish"
