@@ -105,7 +105,7 @@ jobs:
       - name: Update deployment.yml
         run: |
           pwd
-          cd config_repo_samplejava/main
+          cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
           git add guestbookdeployment.yml
           git commit -m "Update prod image to ${{ github.ref_name }}"
