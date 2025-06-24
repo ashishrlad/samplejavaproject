@@ -98,6 +98,7 @@ jobs:
           git config --global user.name "Ashish"
           git config --global user.email "ashishrlad@gmail.com"
           git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
+          cd config_repo_samplejava
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
 
 
