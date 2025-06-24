@@ -68,3 +68,20 @@ jobs:
           to: ashishrlad@gmail.com
           from: ${{ secrets.MAIL_USERNAME }}
           attachments: trivy-report.txt
+  deploy-prod:
+    needs: java-ci
+    if: github.ref_name == 'prod'
+    runs-on: ubuntu-latest
+    environment: production   # This enforces manual approval
+    steps:
+      - name: Push Docker Image to DockerHub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/prod-java-app:latest
+
+      # Push Image
+      - name: Docker Push
+        if: github.ref_name != 'prod' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
