@@ -112,11 +112,11 @@ jobs:
           pwd
           ls -lah
           cat main/guestbookdeployment.yml
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
+          git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
           git add . #main/guestbookdeployment.yml
           ##git config --global init.defaultBranch ${{ github.ref_name }}
           git commit -m "Update image tag ${{ github.ref_name }}"
-          git push #https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/${{ github.repository }}.git HEAD:main
+          git push https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/${{ github.repository }}.git HEAD:main
           #git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
           #git config --global credential.useHttpPath true
           #git remote add origin 
