@@ -43,13 +43,13 @@ jobs:
       - name: Build Docker Image
         run: |
           echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }} .
 
       # Trivy Security Scan
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest'
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}'
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
@@ -73,7 +73,7 @@ jobs:
       - name: Docker Push
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}
 
   deploy-prod:
     needs: java-ci    
@@ -85,13 +85,13 @@ jobs:
         if: github.ref_name != 'main' 
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}
     
       - name: Push Docker Image to DockerHub
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}    
       - name: Checkout private tools
         uses: actions/checkout@v4
         with:
