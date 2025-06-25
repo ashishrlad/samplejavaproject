@@ -92,13 +92,13 @@ jobs:
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:latest    
-      #- name: Checkout private tools
-        #uses: actions/checkout@v4
-        #with:
-            #repository: ashishrlad/config_repo_samplejava
-            #token: ${{ secrets.API_TOKEN_GITHUB }} # `GH_PAT` is a secret that contains your PAT
-            #path: manifest-repo/main
-            #persist-credentials: true
+      - name: Checkout private tools
+        uses: actions/checkout@v4
+        with:
+            repository: ashishrlad/config_repo_samplejava
+            token: ${{ secrets.GH_PAT_DEST_REPO1 }} # `GH_PAT` is a secret that contains your PAT
+            path: manifest-repo/main
+            persist-credentials: true
 
       - name: "Push Updated Image Tag" 
         run: |
@@ -138,28 +138,4 @@ jobs:
       
       
       
-      #- name: Set authenticated remote URL
-        #run: |
-         #   pwd
-         #   ls -lah
-         #   cd config_repo_samplejava
-         #   git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-         #   git push origin main
-            
-      # Update Manifest Repo
-      #- name: Update Manifest Repo
-        #run: |
-          #git config --global user.name "Ashish"
-          #git config --global user.email "ashishrlad@gmail.com"
-          #git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-          #cd config_repo_samplejava/manifest-repo/${{ github.ref_name }}
-          #sed -i "s|^[[:space:]]*- image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
-          #sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
-          #cat guestbookdeployment.yml
-          #git config --global user.name "Ashish"
-          #git config --global user.email "ashishrlad@gmail.com"
-          #git add guestbookdeployment.yml
-          #git commit -m "Update image for ${{ github.ref_name }}"
-          #git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git
-          #git push origin HEAD:${{ github.ref_name }}
-          #git push origin main
+
