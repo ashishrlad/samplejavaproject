@@ -97,7 +97,7 @@ jobs:
             repository: ashishrlad/config_repo_samplejava
             token: ${{ secrets.API_TOKEN_GITHUB }} # `GH_PAT` is a secret that contains your PAT
             path: manifest-repo/main
-            persist-credentials: true
+            #persist-credentials: true
 
       - name: "Push Updated Image Tag" 
         run: |
@@ -112,7 +112,7 @@ jobs:
           pwd
           ls -lah
           cat main/guestbookdeployment.yml
-          git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT1 }}@github.com/ashishrlad/config_repo_samplejava.git
           git add . #main/guestbookdeployment.yml
           ##git config --global init.defaultBranch ${{ github.ref_name }}
           git commit -m "Update image tag ${{ github.ref_name }}"
