@@ -112,7 +112,7 @@ jobs:
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }} 
+           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }} 
         with:
           source_file: 'config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
           destination_repo: 'ashishrlad/config_repo_samplejava'
