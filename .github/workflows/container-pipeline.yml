@@ -117,6 +117,10 @@ jobs:
           git add . #main/guestbookdeployment.yml
           git commit -m "Update image tag ${{ github.ref_name }}"
           #git push origin main 
+      - name: List current directory contents
+        run: |
+           echo "PWD: $(pwd)"
+           find . -name guestbookdeployment.yml
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
