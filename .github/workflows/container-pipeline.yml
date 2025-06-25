@@ -111,15 +111,15 @@ jobs:
           #git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/ashishrlad/config_repo_samplejava.git main      
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
-        #env:
-           #API_TOKEN_GITHUB: ${{ secrets.GH_PAT }} 
+        env:
+           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }} 
         with:
           source_file: 'config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
           destination_repo: 'ashishrlad/config_repo_samplejava'
           destination_folder: 'manifest-repo/main'      # optional
           user_email: 'ashishrlad@gmail.com'
           user_name: 'ashishrlad'
-          token: ${{ secrets.GH_PAT }}
+          #token: ${{ secrets.GH_PAT1 }}
           commit_message: 'A custom message for the commit'
       #- name: Set authenticated remote URL
         #run: |
