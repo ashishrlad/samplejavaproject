@@ -117,24 +117,23 @@ jobs:
           git config --global init.defaultBranch ${{ github.ref_name }}
           git add . #main/guestbookdeployment.yml
           git commit -m "Update image tag ${{ github.ref_name }}"
-          #git push origin main 
-      - name: List current directory contents
-        run: |
-           echo "PWD: $(pwd)"
-           find . -name guestbookdeployment.yml
-      - name: Push to another repo
-        uses: dmnemec/copy_file_to_another_repo_action@main
-        env:
-           API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO1 }}
-        with:
-          source_file: 'config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
-          destination_repo: 'ashishrlad/config_repo_samplejava'
-          destination_folder: 'manifest-repo/main'      # optional
-          user_email: 'ashishrlad@gmail.com'
-          user_name: 'ashishrlad'
-          #token: ${{ secrets.GH_PAT1 }}
-          commit_message: 'A custom message for the commit'
-          git_server: github.com
+          git push origin main 
+      #- name: List current directory contents
+        #run: |
+           #echo "PWD: $(pwd)"
+           #find . -name guestbookdeployment.yml
+      #- name: Push to another repo
+        #uses: dmnemec/copy_file_to_another_repo_action@main
+        #env:
+           #API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO1 }}
+        #with:
+          #source_file: 'config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
+          #destination_repo: 'ashishrlad/config_repo_samplejava'
+          #destination_folder: 'manifest-repo/main'      # optional
+          #user_email: 'ashishrlad@gmail.com'
+          #user_name: 'ashishrlad'
+          #commit_message: 'A custom message for the commit'
+          #git_server: github.com
      
       
       
