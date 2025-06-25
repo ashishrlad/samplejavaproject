@@ -108,8 +108,8 @@ jobs:
           git config --global user.email "ashishrlad@gmail.com"
           ls -lha
           pwd
-          cd /home/runner/work/samplejavaproject/samplejavaproject/manifest-repo/main/manifest-repo
-          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" main/guestbookdeployment.yml
+          cd config_repo_samplejava/manifest-repo/main
+          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" guestbookdeployment.yml
           pwd
           ls -lah
           cat main/guestbookdeployment.yml
