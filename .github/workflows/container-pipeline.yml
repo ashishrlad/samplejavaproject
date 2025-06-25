@@ -106,7 +106,7 @@ jobs:
           git config --global user.email "ashishrlad@gmail.com"
           ls -lha
           pwd
-          cd /home/runner/work/samplejavaproject/samplejavaproject/config_repo_samplejava/manifest-repo/main/
+          #cd manifest-repo/main/
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" manifest-repo/main/guestbookdeployment.yml
           cat manifest-repo/main/guestbookdeployment.yml
           git add manifest-repo/main/guestbookdeployment.yml
