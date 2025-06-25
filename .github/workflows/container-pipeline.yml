@@ -107,10 +107,7 @@ jobs:
           git config --global user.email "ashishrlad@gmail.com"
           ls -lha
           pwd
-          cd manifest-repo/main/
-          ls -lah
-          cd manifest-repo
-          ls -lah
+          cd /home/runner/work/samplejavaproject/samplejavaproject/manifest-repo/main/manifest-repo
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" main/guestbookdeployment.yml
           pwd
           ls -lah
@@ -119,10 +116,10 @@ jobs:
           ##git config --global init.defaultBranch ${{ github.ref_name }}
           git commit -m "Update image tag ${{ github.ref_name }}"
           #git remote remove origin
-          ##git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
-          ##git config --global credential.useHttpPath true
+          git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
+          git config --global credential.useHttpPath true
           #git remote add origin 
-          git push origin main #https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git main      
+          git push https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git main      
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
