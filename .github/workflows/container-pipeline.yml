@@ -107,7 +107,7 @@ jobs:
           ls -lha
           pwd
           #cd manifest-repo/main/
-          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" manifest-repo/main/guestbookdeployment.yml
+          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml
           cat manifest-repo/main/guestbookdeployment.yml
           git add manifest-repo/main/guestbookdeployment.yml
           git config --global init.defaultBranch ${{ github.ref_name }}
