@@ -97,6 +97,7 @@ jobs:
             repository: ashishrlad/config_repo_samplejava
             token: ${{ secrets.API_TOKEN_GITHUB }} # `GH_PAT` is a secret that contains your PAT
             path: manifest-repo/main
+            persist-credentials: true
 
       - name: "Push Updated Image Tag" 
         run: |
@@ -106,7 +107,10 @@ jobs:
           git config --global user.email "ashishrlad@gmail.com"
           ls -lha
           pwd
-          #cd manifest-repo/main/
+          cd manifest-repo/main/
+          ls -lah
+          cd main
+          ls -lah
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}-java-app:${{ github.run_id }}|" config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml
           cat manifest-repo/main/guestbookdeployment.yml
           git add manifest-repo/main/guestbookdeployment.yml
