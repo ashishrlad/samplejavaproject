@@ -8,7 +8,7 @@ on:
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+  API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO }}
   #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -125,7 +125,7 @@ jobs:
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-           API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+           API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO }}
         with:
           source_file: 'config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
           destination_repo: 'ashishrlad/config_repo_samplejava'
