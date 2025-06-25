@@ -8,8 +8,8 @@ on:
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+  #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   java-ci:
@@ -96,7 +96,7 @@ jobs:
         uses: actions/checkout@v4
         with:
             repository: ashishrlad/config_repo_samplejava
-            token: ${{ secrets.API_TOKEN_GITHUB }} # `GH_PAT` is a secret that contains your PAT
+            token: ${{ secrets.GITHUB_TOKEN }} # `GH_PAT` is a secret that contains your PAT
             path: manifest-repo/main
             #persist-credentials: true
 
@@ -113,7 +113,7 @@ jobs:
           pwd
           ls -lah
           cat main/guestbookdeployment.yml
-          git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/ashishrlad/config_repo_samplejava.git
           git config --global init.defaultBranch ${{ github.ref_name }}
           git add . #main/guestbookdeployment.yml
           git commit -m "Update image tag ${{ github.ref_name }}"
@@ -125,7 +125,7 @@ jobs:
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
         with:
           source_file: 'manifest-repo/main/manifest-repo/main/guestbookdeployment.yml'
           destination_repo: 'ashishrlad/config_repo_samplejava'
