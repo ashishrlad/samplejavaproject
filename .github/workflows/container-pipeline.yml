@@ -8,7 +8,7 @@ on:
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO }}
+  API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO1 }}
   #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -102,7 +102,7 @@ jobs:
 
       - name: "Push Updated Image Tag" 
         run: |
-          git clone https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
+          git clone https://x-access-token:${{ secrets.GH_PAT_DEST_REPO1 }}@github.com/ashishrlad/config_repo_samplejava.git
           #git init
           git config --global user.name "ashishrlad"
           git config --global user.email "ashishrlad@gmail.com"
@@ -113,7 +113,7 @@ jobs:
           pwd
           ls -lah
           cat guestbookdeployment.yml
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/ashishrlad/config_repo_samplejava.git
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT_DEST_REPO1 }}@github.com/ashishrlad/config_repo_samplejava.git
           git config --global init.defaultBranch ${{ github.ref_name }}
           git add . #main/guestbookdeployment.yml
           git commit -m "Update image tag ${{ github.ref_name }}"
@@ -125,7 +125,7 @@ jobs:
       - name: Push to another repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-           API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO }}
+           API_TOKEN_GITHUB: ${{ secrets.GH_PAT_DEST_REPO1 }}
         with:
           source_file: 'config_repo_samplejava/manifest-repo/main/guestbookdeployment.yml'
           destination_repo: 'ashishrlad/config_repo_samplejava'
