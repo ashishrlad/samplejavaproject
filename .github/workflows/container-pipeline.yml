@@ -102,7 +102,7 @@ jobs:
 
       - name: "Push Updated Image Tag" 
         run: |
-          #git clone https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
+          git clone https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
           #git init
           git config --global user.name "ashishrlad"
           git config --global user.email "ashishrlad@gmail.com"
