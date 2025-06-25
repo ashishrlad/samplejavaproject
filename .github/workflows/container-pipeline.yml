@@ -115,7 +115,7 @@ jobs:
           git add . #main/guestbookdeployment.yml
           ##git config --global init.defaultBranch ${{ github.ref_name }}
           git commit -m "Update image tag ${{ github.ref_name }}"
-          #git remote remove origin
+          git remote remove origin
           git remote set-url origin https://x-access-token:${{ secrets.API_TOKEN_GITHUB }}@github.com/ashishrlad/config_repo_samplejava.git
           git config --global credential.useHttpPath true
           #git remote add origin 
