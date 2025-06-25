@@ -42,8 +42,7 @@ jobs:
       # Docker Build
       - name: Build Docker Image
         run: |
-          #echo -e "FROM eclipse-temurin:17\nCOPY target/*.jar /app.jar\nENTRYPOINT [\"java\", \"-jar\", \"/app.jar\"]" > Dockerfile
-          docker build -t ${IMAGE_NAME} .
+           docker build -t ${IMAGE_NAME} .
 
       # Trivy Security Scan
       - name: Run Trivy vulnerability scanner
